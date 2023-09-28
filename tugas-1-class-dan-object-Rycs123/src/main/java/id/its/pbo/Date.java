@@ -11,39 +11,38 @@ public class Date {
         this.year = year;
     }
     public int getDay(){
-        //  * Bulan 2, tahun kabisat, dan hari 1 - 29 maka return day atau return invalid
-        if (this.month == 2 && isLeapYear(this.year)) {
-            if (this.day > 0 && this.day < 30) {
+        if (isInFebruary()) {
+            if ((isLeapYear(this.year) && isDayValidUntil(29)) ||
+                    !(isLeapYear(this.year)) && isDayValidUntil(28)){
                 return this.day;
-            } else {
-                return this.day = 1;
             }
         }
-        // * bulan 2, bukan tahun kabisat, hari 1 - 28 retrun harinya
-        else if (this.month == 2 && !(isLeapYear(this.year))){
-            if(this.day > 0 && this.day < 29){
-                return this.day;
-            } else {
-                return this.day = 1;
-            }
-        }
-        // * selain bulan 2 hari 1 - 31
-        else if(this.month > 0 && this.month < 13 && this.month != 2){
+        if(!isInFebruary() && isDayValidUntil(31)){
             return this.day;
         }
-        // * invalid day
-        else if (this.day < 0){
-            return this.day = 1;
-        }
-        return this.day;
+
+        return 1;
+    }
+
+    private boolean isDayValidUntil(int finalDay) {
+        return this.day > 0 && this.day <= finalDay;
+    }
+
+    private boolean isInFebruary() {
+        return this.month == 2;
     }
 
     public int getMonth(){
-        if(this.month > 0 && this.month < 13){
+        if(isMonthBetweenJanuaryToDecember()){
             return this.month;
         }
-        return this.month = 1;
+        return 1;
     }
+
+    private boolean isMonthBetweenJanuaryToDecember() {
+        return this.month > 0 && this.month < 13;
+    }
+
     public int getYear(){
         if (this.year < 1){
             return 0;
@@ -51,14 +50,14 @@ public class Date {
         return this.year;
     }
     public void setDay(int day){
-        if ((day > 0)  &&  (day < 32)){
+        if (isDayValidUntil(31)){
             this.day = day;
         } else{
             this.day = 1;
         }
     }
     public void setMonth(int month){
-        if ((month > 0)  &&  (day < 13)){
+        if (isMonthBetweenJanuaryToDecember()){
             this.month = month;
         } else {
             this.month = 1;
